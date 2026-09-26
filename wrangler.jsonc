@@ -1,0 +1,9 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "get-off-my-lawn",
+  "compatibility_date": "2026-09-01",
+  // Static site: Cloudflare serves the Vite build output directly. No Worker script.
+  "assets": {
+    "directory": "./dist"
+  }
+}
