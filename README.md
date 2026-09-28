@@ -36,3 +36,19 @@ Click a slot to place the selected contraption; click a contraption to rotate it
 - `src/render/` — Canvas2D renderer
 - `src/ui/` — HUD, overlays, save
 - `src/main.ts` — fixed-step loop and input
+
+## Website (`app/`)
+
+SvelteKit site, using the same stack as Dealops: Svelte 5, TypeScript, Tailwind CSS v4, and `@sveltejs/adapter-cloudflare` targeting Cloudflare Pages. Vitest handles unit and component tests (browser mode), Playwright handles e2e, and ESLint + Prettier handle linting.
+
+```bash
+cd app
+npm install
+npm run dev        # http://localhost:5173
+npm run check      # svelte-check + wrangler types
+npm run lint
+npm run test:unit -- --run
+npm run build && npm run preview   # production-like, via wrangler pages dev
+```
+
+Deploys are tag-gated: pushing a `v*` tag runs `.github/workflows/deploy.yml`, which builds `app/` and deploys it to the `goml` Cloudflare Pages project. The repo needs `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` secrets.
