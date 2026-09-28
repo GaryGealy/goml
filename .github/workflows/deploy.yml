@@ -1,4 +1,4 @@
-name: Deploy website to Cloudflare Pages
+name: Deploy website to Cloudflare Workers
 
 on:
   push:
@@ -23,13 +23,13 @@ jobs:
           cache-dependency-path: app/package-lock.json
       - run: npm ci
       - run: npm run build
-      - name: Deploy to Cloudflare Pages
+      - name: Deploy to Cloudflare Workers
         id: deploy
         uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: app
-          command: pages deploy .svelte-kit/cloudflare --project-name=goml --branch=main
+          command: deploy
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
       - run: echo "Deployed ${{ github.ref_name }} → ${{ steps.deploy.outputs.deployment-url }}"
