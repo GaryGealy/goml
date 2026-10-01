@@ -1,4 +1,4 @@
-import { HEAT_MAX, LAWN_MAX, WARY_HEAT } from './constants';
+import { TUNING } from './constants';
 import { INTRUDERS } from './intruders';
 import { chainHeat, hazardHeat, waveCooling } from './scoring';
 import type { SimEvent } from './types';
@@ -21,16 +21,16 @@ export function lawnDamage(m: Meters): number {
 }
 
 export function isLawnDestroyed(m: Meters): boolean {
-	return lawnDamage(m) >= LAWN_MAX;
+	return lawnDamage(m) >= TUNING.LAWN_MAX;
 }
 
 /** Word has gotten around: intruders steer around visible contraptions. */
 export function isWary(m: Meters): boolean {
-	return m.heat >= WARY_HEAT;
+	return m.heat >= TUNING.WARY_HEAT;
 }
 
 function addHeat(m: Meters, amount: number): void {
-	m.heat = Math.max(0, Math.min(HEAT_MAX, m.heat + amount));
+	m.heat = Math.max(0, Math.min(TUNING.HEAT_MAX, m.heat + amount));
 }
 
 /** Consume one simulation event. Meters own no rules about how the event was produced. */

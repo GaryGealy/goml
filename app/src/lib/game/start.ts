@@ -115,6 +115,8 @@ export function startGame(): () => void {
 		if (removeContraption(game, slotUnderPointer(e))) refreshPreview();
 	});
 	on(window, 'keydown', (e) => {
+		// Typing into a form field (the tuning panel) is not a game command.
+		if ((e.target as HTMLElement | null)?.closest?.('input, select, textarea')) return;
 		const n = Number(e.key);
 		const kinds = available(game);
 		if (n >= 1 && n <= kinds.length) {

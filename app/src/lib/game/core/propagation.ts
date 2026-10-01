@@ -1,6 +1,6 @@
 import type { Cell, Dir, Placed } from './types';
 import { CONTRAPTIONS } from './contraptions';
-import { MAX_CHAIN, WET_SLIDE_BONUS } from './constants';
+import { TUNING } from './constants';
 import { isWalkable, slotAt, stepCell, terrainAt, type Lawn } from './lawn';
 
 export type PushOutcome = 'deflected' | 'handed' | 'released';
@@ -45,7 +45,7 @@ export function resolvePush(
 /** How far a contraption shoves someone, including the slide a wet intruder gets from kinetic tools. */
 export function pushDistance(placed: Placed, wet: boolean): number {
 	const spec = CONTRAPTIONS[placed.kind];
-	return spec.push + (spec.output === 'kinetic' && wet ? WET_SLIDE_BONUS : 0);
+	return spec.push + (spec.output === 'kinetic' && wet ? TUNING.WET_SLIDE_BONUS : 0);
 }
 
 /** Cells a contraption's emission covers: its own slot, then `range` cells ahead until something solid. */
@@ -108,7 +108,8 @@ export function traceChain(lawn: Lawn, placed: (Placed | null)[], startSlot: num
 			lawn.slots[slot],
 			p.facing,
 			pushDistance(p, wet),
-			(s) => isReceiver(placed[s]) && !trace.stages.includes(s) && trace.stages.length < MAX_CHAIN
+			(s) =>
+				isReceiver(placed[s]) && !trace.stages.includes(s) && trace.stages.length < TUNING.MAX_CHAIN
 		);
 		trace.path.push(...r.path);
 		if (r.outcome !== 'handed') {

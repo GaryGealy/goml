@@ -1,4 +1,4 @@
-import { CHAIN_STAGE_LAWN_DAMAGE, MAX_CHAIN, SENSOR_COOLDOWN } from './constants';
+import { TUNING } from './constants';
 import { CONTRAPTIONS } from './contraptions';
 import { INTRUDERS } from './intruders';
 import { cellIndex, isProperty, sameCell, slotAt, type Lawn } from './lawn';
@@ -58,7 +58,9 @@ function isIdle(p: Placed): boolean {
 /** Can `slot` take this intruder as the next stage right now? */
 function canReceive(sim: SimState, slot: number, it: Intruder): boolean {
 	const p = sim.placed[slot];
-	return isReceiver(p) && isIdle(p) && !it.visited.includes(slot) && it.chainLength < MAX_CHAIN;
+	return (
+		isReceiver(p) && isIdle(p) && !it.visited.includes(slot) && it.chainLength < TUNING.MAX_CHAIN
+	);
 }
 
 /**
@@ -86,7 +88,7 @@ function beginStage(
 	p.holding = it.id;
 	p.busyFor = CONTRAPTIONS[p.kind].stageSeconds;
 	events.push({ type: 'stageStarted', slot, intruderId: it.id, chainLength: it.chainLength });
-	if (it.chainLength >= 2) events.push({ type: 'dragged', amount: CHAIN_STAGE_LAWN_DAMAGE });
+	if (it.chainLength >= 2) events.push({ type: 'dragged', amount: TUNING.CHAIN_STAGE_LAWN_DAMAGE });
 }
 
 function finish(it: Intruder, how: 'deflected' | 'chained', events: SimEvent[]): void {
@@ -165,7 +167,7 @@ function tickSensors(sim: SimState, events: SimEvent[]): void {
 			(i) => i.status === 'walking' && Math.abs(i.cell.x - at.x) + Math.abs(i.cell.y - at.y) <= 1
 		);
 		if (!near) return;
-		p.busyFor = SENSOR_COOLDOWN;
+		p.busyFor = TUNING.SENSOR_COOLDOWN;
 		const target = signalTarget(sim.lawn, sim.placed, slot);
 		if (target < 0) return;
 		events.push({ type: 'signal', from: slot, to: target });

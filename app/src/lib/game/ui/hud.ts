@@ -1,4 +1,4 @@
-import { HEAT_MAX, LAWN_MAX, WARY_HEAT } from '../core/constants';
+import { TUNING } from '../core/constants';
 import { CONTRAPTIONS } from '../core/contraptions';
 import { available, type Game } from '../core/game';
 import { INTRUDERS } from '../core/intruders';
@@ -17,10 +17,10 @@ export function renderHud(g: Game): void {
 	$('wave').textContent =
 		`Wave ${Math.min(g.waveIndex + 1, WAVES.length)}/${WAVES.length} — ${wave.name}`;
 	$('score').textContent = `Score ${g.waveScore.total} / Par ${wave.par}`;
-	$('lawn-intruders').style.width = pct(g.meters.lawnByIntruders, LAWN_MAX);
-	$('lawn-self').style.width = pct(g.meters.lawnBySelf, LAWN_MAX);
-	$('heat').style.width = pct(g.meters.heat, HEAT_MAX);
-	$('wary-tick').style.left = pct(WARY_HEAT, HEAT_MAX);
+	$('lawn-intruders').style.width = pct(g.meters.lawnByIntruders, TUNING.LAWN_MAX);
+	$('lawn-self').style.width = pct(g.meters.lawnBySelf, TUNING.LAWN_MAX);
+	$('heat').style.width = pct(g.meters.heat, TUNING.HEAT_MAX);
+	$('wary-tick').style.left = pct(TUNING.WARY_HEAT, TUNING.HEAT_MAX);
 	$('sign').textContent = wave.sign;
 	$<HTMLButtonElement>('start').disabled = g.phase !== 'build';
 }

@@ -10,7 +10,7 @@ import {
 	tick,
 	type Game
 } from '../core/game';
-import { LAWN_MAX } from '../core/constants';
+import { TUNING } from '../core/constants';
 import { unlockedThrough, WAVES } from '../core/waves';
 
 function playOut(g: Game, maxSeconds = 120): void {
@@ -95,7 +95,7 @@ describe('waves', () => {
 	it('ends the run when the lawn is destroyed', () => {
 		const g = newGame();
 		startWave(g);
-		g.meters.lawnByIntruders = LAWN_MAX - 0.01;
+		g.meters.lawnByIntruders = TUNING.LAWN_MAX - 0.01;
 		playOut(g);
 		expect(g.phase).toBe('gameOver');
 	});
