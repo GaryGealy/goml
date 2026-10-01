@@ -1,4 +1,4 @@
-import { HIGH_SYMPATHY } from './constants';
+import { TUNING } from './constants';
 import { INTRUDERS } from './intruders';
 import { DEFAULT_LAWN_ROWS, parseLawn, rotateCW } from './lawn';
 import {
@@ -108,10 +108,11 @@ export function startWave(g: Game): boolean {
 }
 
 function track(g: Game, e: SimEvent): void {
-	if (e.type === 'spawned' && INTRUDERS[e.kind].sympathy >= HIGH_SYMPATHY) g.highSympathyTotal++;
+	if (e.type === 'spawned' && INTRUDERS[e.kind].sympathy >= TUNING.HIGH_SYMPATHY)
+		g.highSympathyTotal++;
 	if (
 		(e.type === 'harmed' || e.type === 'chainCompleted') &&
-		INTRUDERS[e.kind].sympathy >= HIGH_SYMPATHY
+		INTRUDERS[e.kind].sympathy >= TUNING.HIGH_SYMPATHY
 	) {
 		g.highSympathyHurt.add(e.intruderId);
 	}

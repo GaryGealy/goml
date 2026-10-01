@@ -1,7 +1,20 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { startGame } from '$lib/game/start';
+	import { loadTuning } from '$lib/game/tuning';
+	import TuningPanel from '$lib/game/TuningPanel.svelte';
 	import '$lib/game/game.css';
+
+	// Storage can be missing or throw (private windows, blocked site data).
+	const storage = (() => {
+		try {
+			return window.localStorage;
+		} catch {
+			return undefined;
+		}
+	})();
+	// Apply saved tuning before the game or the panel reads any values.
+	loadTuning(storage);
 
 	onMount(() => startGame());
 </script>
@@ -44,6 +57,7 @@
 			</p>
 		</aside>
 	</main>
+	<TuningPanel {storage} />
 	<div id="overlay" class="overlay" hidden>
 		<div class="card">
 			<div id="overlay-body"></div>

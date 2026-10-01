@@ -1,9 +1,4 @@
-import {
-	PAYOFF_MIN_STAGES,
-	PAYOFF_SECONDS,
-	PAYOFF_SUPPRESS,
-	PAYOFF_TIME_SCALE
-} from '../core/constants';
+import { TUNING } from '../core/constants';
 
 /**
  * Uniform slow motion when a long chain fires. Everything slows together, so it is
@@ -15,13 +10,13 @@ export class PayoffCamera {
 	private suppressedUntil = -Infinity;
 
 	onStage(chainLength: number, now: number): boolean {
-		if (chainLength < PAYOFF_MIN_STAGES || now < this.suppressedUntil) return false;
-		this.until = now + PAYOFF_SECONDS;
-		this.suppressedUntil = now + PAYOFF_SUPPRESS;
+		if (chainLength < TUNING.PAYOFF_MIN_STAGES || now < this.suppressedUntil) return false;
+		this.until = now + TUNING.PAYOFF_SECONDS;
+		this.suppressedUntil = now + TUNING.PAYOFF_SUPPRESS;
 		return true;
 	}
 
 	timeScale(now: number): number {
-		return now < this.until ? PAYOFF_TIME_SCALE : 1;
+		return now < this.until ? TUNING.PAYOFF_TIME_SCALE : 1;
 	}
 }

@@ -30,11 +30,16 @@ Deploys are tag-gated. Merging to `main` runs CI only. Pushing a `v*` tag runs `
 
 Click a slot to place the selected contraption. Click a contraption to rotate it, including mid-wave. Right-click removes a contraption (build phase only). Hover to preview the chain. Keys: 1–5 select, R rotates, Space starts the wave.
 
+## Tuning panel
+
+The **Tuning** button at the bottom right of `/play` opens sliders for every value in `core/constants.ts`, plus each intruder's speed, sympathy and lawn damage. Changes apply immediately, even mid-wave, and are saved in your browser. **Copy JSON** copies only the values you've changed, ready to fold back into `constants.ts` / `intruders.ts` once they feel right. **Reset all** goes back to the source defaults.
+
 ## Layout
 
 - `app/src/lib/game/core/`: game rules, with no browser dependencies
 - `app/src/lib/game/render/`: Canvas2D renderer
 - `app/src/lib/game/ui/`: HUD, overlays, save
+- `app/src/lib/game/tuning.ts` + `TuningPanel.svelte`: runtime tuning (gameplay reads `TUNING.X` at the moment of use)
 - `app/src/lib/game/start.ts`: fixed-step loop and input; `startGame()` returns a cleanup
 - `app/src/lib/game/tests/`: Vitest tests for the rules, layout, camera and save
 - `app/src/routes/play/`: the `/play` page that mounts the game
