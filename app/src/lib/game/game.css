@@ -1,46 +1,205 @@
-:root {
-  --bg: #f4efe4;
-  --ink: #1f1d1a;
-  --muted: #6b655b;
-  --panel: #fffaf0;
-  --line: #d8cfbd;
-  --accent: #2f6fed;
-  --lawn-intruders: #5b4636;
-  --lawn-self: #d62839;
-  --heat: #ff7a1a;
+/* Scoped under .gomy (the /play page root) so the prototype styles never leak into the rest of the site. */
+.gomy {
+	--bg: #f4efe4;
+	--ink: #1f1d1a;
+	--muted: #6b655b;
+	--panel: #fffaf0;
+	--line: #d8cfbd;
+	--accent: #2f6fed;
+	--lawn-intruders: #5b4636;
+	--lawn-self: #d62839;
+	--heat: #ff7a1a;
 }
-* { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.4 system-ui, sans-serif; }
-.hud { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; padding: 10px 16px; border-bottom: 1px solid var(--line); background: var(--panel); }
-.hud h1 { font-size: 18px; margin: 0 8px 0 0; }
-.stat { font-variant-numeric: tabular-nums; }
-.meter { display: flex; align-items: center; gap: 8px; }
-.meter .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
-.bar { position: relative; display: flex; width: 160px; height: 12px; border-radius: 6px; background: #e8e1d2; overflow: hidden; }
-.fill { height: 100%; }
-.fill.intruders { background: var(--lawn-intruders); }
-.fill.self { background: var(--lawn-self); }
-.fill.heat { background: var(--heat); }
-.tick { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--ink); }
-main { display: flex; gap: 16px; padding: 16px; align-items: flex-start; }
-#board { flex: 1 1 auto; width: 100%; max-width: 960px; aspect-ratio: 12 / 9; border-radius: 8px; background: #6fbf4a; cursor: pointer; }
-.panel { flex: 0 0 280px; display: flex; flex-direction: column; gap: 12px; }
-.sign { margin: 0; padding: 12px; background: #fff; border: 2px solid var(--ink); font-weight: 700; text-align: center; text-transform: none; }
-.palette { display: grid; gap: 6px; }
-.palette button { display: flex; gap: 8px; align-items: center; padding: 8px; border: 1px solid var(--line); border-radius: 6px; background: #fff; text-align: left; cursor: pointer; font: inherit; }
-.palette button.selected { outline: 3px solid var(--accent); }
-.palette .chip { width: 22px; height: 22px; border-radius: 4px; color: #fff; font-weight: 700; display: grid; place-items: center; }
-.palette .type { margin-left: auto; font-size: 12px; color: var(--muted); }
-button.primary { padding: 10px; border: 0; border-radius: 6px; background: var(--accent); color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
-button.primary:disabled { opacity: 0.4; cursor: default; }
-.preview { min-height: 72px; padding: 10px; border: 1px dashed var(--line); border-radius: 6px; font-size: 13px; }
-.preview .neg { color: #b3261e; }
-.help { margin: 0; font-size: 12px; color: var(--muted); }
-.overlay { position: fixed; inset: 0; display: grid; place-items: center; background: rgba(0,0,0,0.45); }
-.overlay[hidden] { display: none; }
-.card { width: min(420px, calc(100vw - 32px)); padding: 20px; border-radius: 10px; background: var(--panel); display: flex; flex-direction: column; gap: 12px; }
-.card h2 { margin: 0; }
+.gomy,
+.gomy * {
+	box-sizing: border-box;
+}
+.gomy {
+	min-height: 100vh;
+	background: var(--bg);
+	color: var(--ink);
+	font:
+		15px/1.4 system-ui,
+		sans-serif;
+}
+.gomy .hud {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px 20px;
+	align-items: center;
+	padding: 10px 16px;
+	border-bottom: 1px solid var(--line);
+	background: var(--panel);
+}
+.gomy .hud h1 {
+	font-size: 18px;
+	font-weight: 700;
+	margin: 0 8px 0 0;
+}
+.gomy .stat {
+	font-variant-numeric: tabular-nums;
+}
+.gomy .meter {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+.gomy .meter .label {
+	font-size: 12px;
+	color: var(--muted);
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+.gomy .bar {
+	position: relative;
+	display: flex;
+	width: 160px;
+	height: 12px;
+	border-radius: 6px;
+	background: #e8e1d2;
+	overflow: hidden;
+}
+.gomy .fill {
+	height: 100%;
+}
+.gomy .fill.intruders {
+	background: var(--lawn-intruders);
+}
+.gomy .fill.self {
+	background: var(--lawn-self);
+}
+.gomy .fill.heat {
+	background: var(--heat);
+}
+.gomy .tick {
+	position: absolute;
+	top: -2px;
+	bottom: -2px;
+	width: 2px;
+	background: var(--ink);
+}
+.gomy main {
+	display: flex;
+	gap: 16px;
+	padding: 16px;
+	align-items: flex-start;
+}
+.gomy #board {
+	flex: 1 1 auto;
+	width: 100%;
+	max-width: 960px;
+	aspect-ratio: 12 / 9;
+	border-radius: 8px;
+	background: #6fbf4a;
+	cursor: pointer;
+}
+.gomy .panel {
+	flex: 0 0 280px;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+.gomy .sign {
+	margin: 0;
+	padding: 12px;
+	background: #fff;
+	border: 2px solid var(--ink);
+	font-weight: 700;
+	text-align: center;
+	text-transform: none;
+}
+.gomy .palette {
+	display: grid;
+	gap: 6px;
+}
+.gomy .palette button {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	padding: 8px;
+	border: 1px solid var(--line);
+	border-radius: 6px;
+	background: #fff;
+	text-align: left;
+	cursor: pointer;
+	font: inherit;
+}
+.gomy .palette button.selected {
+	outline: 3px solid var(--accent);
+}
+.gomy .palette .chip {
+	width: 22px;
+	height: 22px;
+	border-radius: 4px;
+	color: #fff;
+	font-weight: 700;
+	display: grid;
+	place-items: center;
+}
+.gomy .palette .type {
+	margin-left: auto;
+	font-size: 12px;
+	color: var(--muted);
+}
+.gomy button.primary {
+	padding: 10px;
+	border: 0;
+	border-radius: 6px;
+	background: var(--accent);
+	color: #fff;
+	font: inherit;
+	font-weight: 700;
+	cursor: pointer;
+}
+.gomy button.primary:disabled {
+	opacity: 0.4;
+	cursor: default;
+}
+.gomy .preview {
+	min-height: 72px;
+	padding: 10px;
+	border: 1px dashed var(--line);
+	border-radius: 6px;
+	font-size: 13px;
+}
+.gomy .preview .neg {
+	color: #b3261e;
+}
+.gomy .help {
+	margin: 0;
+	font-size: 12px;
+	color: var(--muted);
+}
+.gomy .overlay {
+	position: fixed;
+	inset: 0;
+	display: grid;
+	place-items: center;
+	background: rgba(0, 0, 0, 0.45);
+}
+.gomy .overlay[hidden] {
+	display: none;
+}
+.gomy .card {
+	width: min(420px, calc(100vw - 32px));
+	padding: 20px;
+	border-radius: 10px;
+	background: var(--panel);
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+.gomy .card h2 {
+	margin: 0;
+	font-size: 1.5em;
+	font-weight: 700;
+}
 @media (max-width: 800px) {
-  main { flex-direction: column; }
-  .panel { flex-basis: auto; width: 100%; }
+	.gomy main {
+		flex-direction: column;
+	}
+	.gomy .panel {
+		flex-basis: auto;
+		width: 100%;
+	}
 }
