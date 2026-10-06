@@ -55,6 +55,11 @@
 				during a wave). Right-click removes (build only). Hover to preview the chain. Keys: 1–5
 				select, R rotates.
 			</p>
+			<p class="help">
+				Before a wave, dotted lines show where each intruder will walk (labels: order · seconds in).
+				A ring marks the contraption that grabs them; a yellow dot marks a motion sensor they trip.
+				Once shoved, they re-route from wherever they land.
+			</p>
 		</aside>
 	</main>
 	<TuningPanel {storage} />

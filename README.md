@@ -30,6 +30,8 @@ Deploys are tag-gated. Merging to `main` runs CI only. Pushing a `v*` tag runs `
 
 Click a slot to place the selected contraption. Click a contraption to rotate it, including mid-wave. Right-click removes a contraption (build phase only). Hover to preview the chain. Keys: 1–5 select, R rotates, Space starts the wave.
 
+During the build phase, dotted lines show where each intruder in the coming wave will walk. Each entry is labelled with spawn order and seconds into the wave, and paths are colored by intruder. A ring marks the contraption that grabs them, and a yellow dot marks where they trip a motion sensor. Once heat reaches the wary threshold, the preview shows their detours around contraptions. The preview is exact up to the first shove; after that they re-route from wherever they land.
+
 ## Tuning panel
 
 The **Tuning** button at the bottom right of `/play` opens sliders for every value in `core/constants.ts`, plus each intruder's speed, sympathy and lawn damage. Changes apply immediately, even mid-wave, and are saved in your browser. **Copy JSON** copies only the values you've changed, ready to fold back into `constants.ts` / `intruders.ts` once they feel right. **Reset all** goes back to the source defaults.
