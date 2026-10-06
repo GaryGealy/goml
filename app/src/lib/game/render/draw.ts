@@ -3,6 +3,7 @@ import type { Game } from '../core/game';
 import { INTRUDERS } from '../core/intruders';
 import { DIR_VECTORS, terrainAt } from '../core/lawn';
 import type { ChainTrace } from '../core/propagation';
+import { predictWaveRoutes, type RoutePreview } from '../core/routes';
 import type { Cell, Dir, Intruder } from '../core/types';
 import { cellCenter, type Layout } from './layout';
 import {
@@ -140,6 +141,67 @@ function drawTrace(ctx: CanvasRenderingContext2D, l: Layout, trace: ChainTrace |
 	ctx.fill();
 }
 
+/** Build phase: where this wave's intruders will walk, so traps can be placed on purpose. */
+function drawRoutes(ctx: CanvasRenderingContext2D, l: Layout, routes: RoutePreview[]): void {
+	const labels = new Map<string, { cell: Cell; text: string[] }>();
+	routes.forEach((r, i) => {
+		if (r.path.length < 2) return;
+		const color = INTRUDER_BODIES[r.kind].color;
+		const pts = r.path.map((c) => cellCenter(l, c));
+		ctx.strokeStyle = color;
+		ctx.globalAlpha = 0.85;
+		ctx.lineWidth = Math.max(2, l.cell * 0.06);
+		ctx.setLineDash([l.cell * 0.12, l.cell * 0.1]);
+		ctx.beginPath();
+		pts.forEach((p, j) => (j === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y)));
+		ctx.stroke();
+		ctx.setLineDash([]);
+		const end = pts[pts.length - 1];
+		if (r.caughtSlot >= 0) {
+			// Grabbed here: ring the contraption that takes them.
+			ctx.lineWidth = 3;
+			ctx.beginPath();
+			ctx.arc(end.x, end.y, l.cell * 0.44, 0, Math.PI * 2);
+			ctx.stroke();
+		} else {
+			const prev = pts[pts.length - 2];
+			const a = Math.atan2(end.y - prev.y, end.x - prev.x);
+			const s = l.cell * 0.22;
+			ctx.fillStyle = color;
+			ctx.beginPath();
+			ctx.moveTo(end.x + Math.cos(a) * s, end.y + Math.sin(a) * s);
+			ctx.lineTo(end.x + Math.cos(a + 2.5) * s, end.y + Math.sin(a + 2.5) * s);
+			ctx.lineTo(end.x + Math.cos(a - 2.5) * s, end.y + Math.sin(a - 2.5) * s);
+			ctx.fill();
+		}
+		ctx.fillStyle = OUTPUT_COLORS.signal;
+		for (const t of r.sensorTrips) {
+			ctx.beginPath();
+			ctx.arc(pts[t].x, pts[t].y, l.cell * 0.09, 0, Math.PI * 2);
+			ctx.fill();
+		}
+		ctx.globalAlpha = 1;
+		const key = `${r.path[0].x},${r.path[0].y}`;
+		const label = labels.get(key) ?? { cell: r.path[0], text: [] };
+		label.text.push(`${i + 1}·${r.at}s`);
+		labels.set(key, label);
+	});
+	// Spawn order and timing at each entry point; routes sharing an entry share a label.
+	ctx.font = `bold ${Math.round(l.cell * 0.2)}px system-ui, sans-serif`;
+	ctx.textAlign = 'center';
+	ctx.textBaseline = 'middle';
+	for (const { cell, text } of labels.values()) {
+		const c = cellCenter(l, cell);
+		const str = text.join(' ');
+		const w = ctx.measureText(str).width + 8;
+		const h = l.cell * 0.3;
+		ctx.fillStyle = 'rgba(31,29,26,0.85)';
+		ctx.fillRect(c.x - w / 2, c.y - h / 2, w, h);
+		ctx.fillStyle = '#ffffff';
+		ctx.fillText(str, c.x, c.y);
+	}
+}
+
 function intruderPosition(l: Layout, it: Intruder): { x: number; y: number } {
 	const a = cellCenter(l, it.cell);
 	if (!it.next) return a;
@@ -216,6 +278,7 @@ export function drawFrame(
 ): void {
 	ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 	drawTerrain(ctx, g, l);
+	if (g.phase === 'build') drawRoutes(ctx, l, predictWaveRoutes(g));
 	drawTrace(ctx, l, view.trace);
 	drawContraptions(ctx, g, l, view, now);
 	drawIntruders(ctx, g, l, now);
